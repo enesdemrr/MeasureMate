@@ -62,4 +62,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.ui.fonts)
+    implementation(libs.androidx.material3.windowSizeClass)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
 }
