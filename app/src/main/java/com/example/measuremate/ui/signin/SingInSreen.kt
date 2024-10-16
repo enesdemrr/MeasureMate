@@ -13,6 +13,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -23,12 +28,22 @@ import androidx.compose.ui.unit.dp
 import com.example.measuremate.R
 import com.example.measuremate.ui.component.AnonymousSignInButton
 import com.example.measuremate.ui.component.GoogleSingInButton
+import com.example.measuremate.ui.component.MeasureMateDialog
 import com.example.measuremate.ui.theme.MeasureMateTheme
 
 @Composable
 fun SingInScreen(
     windowSize: WindowWidthSizeClass
 ) {
+    var isSignInAnonymousDialogOpen by rememberSaveable { mutableStateOf(false) }
+    MeasureMateDialog(
+        title = "Login Anonymously",
+        isOpen = isSignInAnonymousDialogOpen,
+        onDismissDialog = {},
+        body = { Text(text = "By logging in anonymously, you will not be able to synchronize the data,") },
+        onConfirmButtonClick = {isSignInAnonymousDialogOpen = false},
+        onDismissButtonClick = {isSignInAnonymousDialogOpen = false}
+    )
     when (windowSize) {
         WindowWidthSizeClass.Compact -> {
             Column(
@@ -56,17 +71,20 @@ fun SingInScreen(
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 AnonymousSignInButton(
-                    onClick = { }
+                    onClick = { isSignInAnonymousDialogOpen = true }
                 )
 
             }
         }
+
         else -> {
             Row(
                 modifier = Modifier.fillMaxSize()
             ) {
                 Column(
-                    modifier = Modifier.fillMaxHeight().weight(1f),
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -86,7 +104,9 @@ fun SingInScreen(
                     )
                 }
                 Column(
-                    modifier = Modifier.fillMaxHeight().weight(1f),
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
