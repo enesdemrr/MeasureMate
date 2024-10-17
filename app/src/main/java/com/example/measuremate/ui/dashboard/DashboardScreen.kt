@@ -27,6 +27,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,19 +39,46 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.example.measuremate.domain.model.BodyPart
+import com.example.measuremate.domain.model.User
 import com.example.measuremate.domain.model.predefinedBodyParts
+import com.example.measuremate.ui.component.MeasureMateDialog
+import com.example.measuremate.ui.component.ProfileBottomSheet
 import com.example.measuremate.ui.component.ProfilePicturePlace
 import com.example.measuremate.ui.theme.MeasureMateTheme
 
 @Composable
 fun DashboardScreen() {
+    var isProfileBottomSheetOpen by remember { mutableStateOf(false) }
+    var isSignOutDialogOpen by rememberSaveable { mutableStateOf(false) }
+    val user = User(
+        name = "Enes",
+        email = "contact@enesdemir.net",
+        profilePictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg",
+        isAnonymous = false
+    )
+    ProfileBottomSheet(
+        isOpen = isProfileBottomSheetOpen,
+        user = null,
+        onBottomSheetDismiss = {},
+        buttonPrimaryText = "Sign out with google",
+        onGoogleButtonClick = { isSignOutDialogOpen = true },
+        buttonLoadingState = false
+    )
+    MeasureMateDialog(
+        title = "Sign out",
+        isOpen = isSignOutDialogOpen,
+        onDismissDialog = {},
+        body = { Text(text = "Are you sure, you want to sign out?") },
+        onConfirmButtonClick = { isSignOutDialogOpen = false },
+        onDismissButtonClick = { isSignOutDialogOpen = false }
+    )
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             DashboardTopBar(
-                profilePictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg",
-                onProfilePictureClick = {}
+                profilePictureUrl = user.profilePictureUrl,
+                onProfilePictureClick = { isProfileBottomSheetOpen = true }
             )
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),

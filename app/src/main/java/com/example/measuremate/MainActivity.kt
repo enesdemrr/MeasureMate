@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MeasureMateTheme {
                 val windowSizeClass = calculateWindowSizeClass(activity = this)
-                SingInScreen(windowSize = windowSizeClass.widthSizeClass)
+                DashboardScreen()
             }
         }
     }
